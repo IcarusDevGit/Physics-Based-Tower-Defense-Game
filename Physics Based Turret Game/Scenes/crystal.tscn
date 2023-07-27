@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://2yc2mrrrvhv8"]
+
+[ext_resource type="Texture2D" uid="uid://cgdhw878jpau1" path="res://Assets/block.png" id="1_p4w03"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_83w3j"]
+size = Vector2(80, 80)
+
+[node name="Crystal" type="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0.811765, 0.317647, 1)
+position = Vector2(9.53674e-07, 4.76837e-07)
+scale = Vector2(5, 5)
+texture = ExtResource("1_p4w03")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_83w3j")

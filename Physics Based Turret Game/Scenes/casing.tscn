@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://46ldw67m3y08"]
+
+[ext_resource type="Texture2D" uid="uid://cgdhw878jpau1" path="res://Assets/block.png" id="1_spolv"]
+[ext_resource type="Script" path="res://Scripts/Casing.gd" id="1_ysbtb"]
+[ext_resource type="AudioStream" uid="uid://digkfn1fmlhkd" path="res://Assets/Sounds/44 Magnum Eject Part 1 With Floor Impact.wav" id="3_f7yju"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hxbm5"]
+radius = 2.0
+height = 10.0
+
+[node name="Casing" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 9
+mass = 0.05
+inertia = 2.11
+script = ExtResource("1_ysbtb")
+lifetime = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_hxbm5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.952941, 0.760784, 0.12549, 1)
+scale = Vector2(0.5, 0.2)
+texture = ExtResource("1_spolv")
+
+[node name="Lifetime" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="FloorImpactSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_f7yju")
+volume_db = -20.0
+
+[node name="FloorCollisionRay" type="RayCast2D" parent="."]
+target_position = Vector2(0, 15)
+
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]

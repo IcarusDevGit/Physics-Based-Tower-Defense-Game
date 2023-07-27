@@ -1,0 +1,118 @@
+[gd_scene load_steps=16 format=3 uid="uid://jt7eybbh60g2"]
+
+[ext_resource type="Script" path="res://Scripts/Tower1.gd" id="1_y4spr"]
+[ext_resource type="PackedScene" uid="uid://dstj81e4y8bjn" path="res://Scenes/bullet.tscn" id="2_we8vs"]
+[ext_resource type="PackedScene" uid="uid://46ldw67m3y08" path="res://Scenes/casing.tscn" id="3_fdvng"]
+[ext_resource type="Texture2D" uid="uid://c6sk65gg1h1xj" path="res://Sprites/uzi_bg.png" id="4_irev3"]
+[ext_resource type="Texture2D" uid="uid://rmekg17ncmam" path="res://Sprites/turret_gun.png" id="5_rtp3q"]
+[ext_resource type="Texture2D" uid="uid://hqonfesdangd" path="res://Sprites/smoke_ball.png" id="6_nkl7i"]
+[ext_resource type="Texture2D" uid="uid://b17lg4vqmnunk" path="res://Sprites/turret_muzzle/turret_muzzle1.png" id="7_0aspf"]
+[ext_resource type="Texture2D" uid="uid://yldst564if4h" path="res://Sprites/turret_muzzle/turret_muzzle2.png" id="8_2224s"]
+[ext_resource type="Texture2D" uid="uid://c3mbtekso46pv" path="res://Sprites/turret_muzzle/turret_muzzle3.png" id="9_blrxq"]
+[ext_resource type="Texture2D" uid="uid://bqg0pbs6xws6v" path="res://Sprites/turret_muzzle/turret_muzzle4.png" id="10_568qd"]
+
+[sub_resource type="Curve" id="Curve_wx7fm"]
+_data = [Vector2(0, 0.501779), 0.0, 0.0, 0, 0, Vector2(0.878543, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xo4rk"]
+curve = SubResource("Curve_wx7fm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_meaxl"]
+particle_flag_disable_z = true
+spread = 10.0
+gravity = Vector3(0, -40, 0)
+initial_velocity_min = 60.0
+initial_velocity_max = 60.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+linear_accel_min = -20.0
+linear_accel_max = -10.0
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_xo4rk")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cc2oi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_0aspf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_2224s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_blrxq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_568qd")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lgphk"]
+radius = 320.0
+
+[node name="Tower2" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 7
+mass = 3.0
+script = ExtResource("1_y4spr")
+BulletScene = ExtResource("2_we8vs")
+CasingScene = ExtResource("3_fdvng")
+BulletSpeed = 400
+RecoilPower = 45
+BaseGunPosition = Vector2(-12, -13)
+ShootSoundVolume = -15
+
+[node name="TowerBG" type="Sprite2D" parent="."]
+texture = ExtResource("4_irev3")
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(24, 0, 24, 24, -24, 24, -24, -24, 0, -24, 0, 0)
+
+[node name="Gun" type="Node2D" parent="."]
+position = Vector2(-12, -13)
+
+[node name="Sprite2D" type="Sprite2D" parent="Gun"]
+z_index = 1
+position = Vector2(4, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_rtp3q")
+
+[node name="Marker2D" type="Marker2D" parent="Gun"]
+position = Vector2(20, 0)
+
+[node name="ShootingTimer" type="Timer" parent="Gun"]
+wait_time = 0.2
+autostart = true
+
+[node name="ShootingParticles" type="GPUParticles2D" parent="Gun"]
+z_index = 1
+position = Vector2(26, 0)
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_meaxl")
+texture = ExtResource("6_nkl7i")
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+
+[node name="MuzzleFlash" type="AnimatedSprite2D" parent="Gun"]
+visible = false
+z_index = 1
+position = Vector2(31, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_cc2oi")
+
+[node name="Range" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Range"]
+shape = SubResource("CircleShape2D_lgphk")
+
+[connection signal="timeout" from="Gun/ShootingTimer" to="." method="_on_shooting_timer_timeout"]
+[connection signal="animation_finished" from="Gun/MuzzleFlash" to="." method="_on_muzzle_flash_animation_finished"]
+[connection signal="body_entered" from="Range" to="." method="_on_range_body_entered"]
+[connection signal="body_exited" from="Range" to="." method="_on_range_body_exited"]

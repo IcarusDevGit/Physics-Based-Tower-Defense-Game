@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://g6ksh8nppjs0"]
+
+[ext_resource type="Script" path="res://Scripts/Explosion.gd" id="1_xdjoh"]
+[ext_resource type="Texture2D" uid="uid://c5q3j0076aoo5" path="res://Assets/circle.png" id="2_311ub"]
+
+[sub_resource type="Gradient" id="Gradient_lvc0a"]
+offsets = PackedFloat32Array(0, 0.211823, 0.448276, 0.640394, 0.778325, 1)
+colors = PackedColorArray(0.756863, 0.898039, 0.917647, 1, 0.776471, 0.870588, 0.470588, 1, 0.952941, 0.760784, 0.12549, 1, 0.768627, 0.396078, 0.109804, 1, 0.709804, 0.254902, 0.192157, 1, 0.0980392, 0.0941176, 0.164706, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_icvrt"]
+gradient = SubResource("Gradient_lvc0a")
+
+[sub_resource type="Curve" id="Curve_3jlkb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.222672, 1), 0.0, 0.0, 0, 0, Vector2(0.651822, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_rmvwk"]
+curve = SubResource("Curve_3jlkb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d1isn"]
+emission_shape = 1
+emission_sphere_radius = 16.0
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 90.0
+gravity = Vector3(0, -12, 0)
+initial_velocity_min = 300.0
+initial_velocity_max = 300.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+linear_accel_min = -1600.0
+linear_accel_max = -800.0
+scale_min = 0.1
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_rmvwk")
+color_ramp = SubResource("GradientTexture1D_icvrt")
+
+[node name="Explosion" type="Node2D"]
+script = ExtResource("1_xdjoh")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+collision_mask = 7
+
+[node name="ExplosionParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 128
+process_material = SubResource("ParticleProcessMaterial_d1isn")
+texture = ExtResource("2_311ub")
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.9
+
+[node name="Lifetime" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]

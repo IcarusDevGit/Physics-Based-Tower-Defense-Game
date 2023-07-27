@@ -1,0 +1,44 @@
+[gd_scene load_steps=9 format=3 uid="uid://bn5kedcgfegac"]
+
+[ext_resource type="Script" path="res://Scripts/Enemy1.gd" id="1_eoofw"]
+[ext_resource type="PackedScene" uid="uid://g6ksh8nppjs0" path="res://Scenes/explosion.tscn" id="2_64rna"]
+[ext_resource type="Texture2D" uid="uid://b2dxitd4c48uy" path="res://Sprites/enemy/enemy1.png" id="2_na0uw"]
+[ext_resource type="Texture2D" uid="uid://cclruuh6s2fug" path="res://Sprites/enemy/enemy2.png" id="3_ck8mw"]
+[ext_resource type="Texture2D" uid="uid://cc014qu6o4jc4" path="res://Sprites/enemy/enemy3.png" id="4_s1rri"]
+[ext_resource type="Texture2D" uid="uid://di6tflnciimqn" path="res://Sprites/enemy/enemy4.png" id="5_i5hrl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ltwpk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_na0uw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ck8mw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_s1rri")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_i5hrl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8yv0o"]
+size = Vector2(16, 24)
+
+[node name="Enemy1" type="CharacterBody2D" groups=["Enemy"]]
+script = ExtResource("1_eoofw")
+Explosion = ExtResource("2_64rna")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(4.76837e-07, -4.76837e-07)
+sprite_frames = SubResource("SpriteFrames_ltwpk")
+frame_progress = 0.497021
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_8yv0o")

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bg7142qcg1toa"]
+
+[ext_resource type="Script" path="res://Scripts/Build_Menu.gd" id="1_18i73"]
+[ext_resource type="Texture2D" uid="uid://i1ykw6b80wgl" path="res://Sprites/build_menu_select.png" id="2_75pc4"]
+
+[node name="Build_Menu" type="Node2D"]
+script = ExtResource("1_18i73")
+
+[node name="Select" type="Sprite2D" parent="."]
+position = Vector2(8, 4)
+texture = ExtResource("2_75pc4")
+centered = false
